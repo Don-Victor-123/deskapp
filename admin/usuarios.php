@@ -1,17 +1,23 @@
 <?php
 require_once "../includes/auth.php";
+require_once "../includes/csrf.php";
 require_once "../config/db.php";
 if (!es_admin()) { header("Location: ../dashboard.php"); exit; }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verify_csrf();
     if ($_POST['accion'] === 'agregar') {
-        $nombre = $_POST['nombre'];
-        $correo = $_POST['correo'];
+        $nombre = trim($_POST['nombre']);
+        $correo = filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL);
         $pass   = $_POST['password'];
+        if (!$correo) {
+            die('Correo inválido');
+        }
+        $hashed = password_hash($pass, PASSWORD_DEFAULT);
         $stmt = $conn->prepare("INSERT INTO Usuario (nombre, correo, password, rol) VALUES (?, ?, ?, 'JefeArea')");
-        $stmt->execute([$nombre, $correo, $pass]);
+        $stmt->execute([$nombre, $correo, $hashed]);
     } elseif ($_POST['accion'] === 'eliminar') {
-        $id = $_POST['id_usuario'];
+        $id = (int)$_POST['id_usuario'];
         $stmt = $conn->prepare("DELETE FROM Usuario WHERE id_usuario = ? AND rol = 'JefeArea'");
         $stmt->execute([$id]);
     }
@@ -31,6 +37,7 @@ $usuarios = $stmt->fetchAll();
     <main class="container">
         <h2>Jefes de Área</h2>
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
             <input type="hidden" name="accion" value="agregar">
             <input type="text" name="nombre" placeholder="Nombre" required>
             <input type="email" name="correo" placeholder="Correo" required>
@@ -45,6 +52,7 @@ $usuarios = $stmt->fetchAll();
                 <td><?= htmlspecialchars($row['correo']) ?></td>
                 <td>
                     <form method="POST" style="display:inline">
+                        <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
                         <input type="hidden" name="accion" value="eliminar">
                         <input type="hidden" name="id_usuario" value="<?= $row['id_usuario'] ?>">
                         <button type="submit" onclick="return confirm('¿Eliminar?')">Eliminar</button>
