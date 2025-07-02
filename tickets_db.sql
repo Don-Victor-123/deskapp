@@ -67,7 +67,7 @@ CREATE TABLE `ticket` (
 --
 
 INSERT INTO `ticket` (`id_ticket`, `titulo`, `descripcion`, `prioridad`, `estado`, `fecha_creacion`, `id_usuario`, `id_area`) VALUES
-(3, 'No jalan los baños', 'E we no jalan los baños', 'Media', 'Realizado', '2025-06-30 20:13:04', 9, 20);
+(3, 'No jalan los baños', 'E we no jalan los baños', 'Media', 'Realizado', '2025-06-30 20:13:04', 9, 1);
 
 -- --------------------------------------------------------
 
@@ -80,16 +80,17 @@ CREATE TABLE `usuario` (
   `nombre` varchar(100) NOT NULL,
   `correo` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `rol` enum('Administrador','JefeArea','Usuario') NOT NULL
+  `rol` enum('Administrador','JefeArea','Usuario') NOT NULL,
+  `id_area` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `nombre`, `correo`, `password`, `rol`) VALUES
-(9, 'Admin Principal', 'admin@demo.com', 'admin123', 'Administrador'),
-(10, 'Jefe Sistemas', 'jefe@demo.com', 'jefe123', 'JefeArea');
+INSERT INTO `usuario` (`id_usuario`, `nombre`, `correo`, `password`, `rol`, `id_area`) VALUES
+(9, 'Admin Principal', 'admin@demo.com', 'admin123', 'Administrador', NULL),
+(10, 'Jefe Sistemas', 'jefe@demo.com', 'jefe123', 'JefeArea', 1);
 
 --
 -- Índices para tablas volcadas
@@ -115,7 +116,8 @@ ALTER TABLE `ticket`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id_usuario`),
-  ADD UNIQUE KEY `correo` (`correo`);
+  ADD UNIQUE KEY `correo` (`correo`),
+  ADD KEY `id_area` (`id_area`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -149,6 +151,8 @@ ALTER TABLE `usuario`
 ALTER TABLE `ticket`
   ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`),
   ADD CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`id_area`) REFERENCES `area` (`id_area`);
+ALTER TABLE `usuario`
+  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`id_area`) REFERENCES `area` (`id_area`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

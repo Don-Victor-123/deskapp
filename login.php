@@ -18,6 +18,7 @@ try {
             if (password_verify($password, $row['password'])) {
                 $_SESSION['id_usuario'] = $row['id_usuario'];
                 $_SESSION['rol'] = $row['rol'];
+                $_SESSION['id_area'] = $row['id_area'];
                 header("Location: dashboard.php");
                 exit;
             }
@@ -28,6 +29,7 @@ try {
                 $upd->execute([$newHash, $row['id_usuario']]);
                 $_SESSION['id_usuario'] = $row['id_usuario'];
                 $_SESSION['rol'] = $row['rol'];
+                $_SESSION['id_area'] = $row['id_area'];
                 header("Location: dashboard.php");
                 exit;
             }
