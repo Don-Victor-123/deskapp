@@ -3,8 +3,9 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    background: linear-gradient(#f0f4ff,#d9e2ff);
     color: #333;
+    min-height: 100vh;
 }
 .container, main.container {
     max-width: 800px;
@@ -17,7 +18,7 @@ body {
 
 /* Header */
 .main-header {
-    background-color: #007bff;
+    background: linear-gradient(90deg, #0062e6, #33aeff);
     color: #fff;
     padding: 10px 0;
 }
@@ -88,6 +89,7 @@ form button {
     color: #fff;
     border: none;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 form button:hover {
     background-color: #0056b3;
@@ -127,4 +129,17 @@ th {
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 10px;
+}
+.message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.forgot {
+    text-align: right;
+}
+.forgot a {
+    color: #007bff;
 }

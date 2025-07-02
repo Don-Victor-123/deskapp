@@ -43,21 +43,7 @@ INSERT INTO `area` (`id_area`, `nombre_area`) VALUES
 (4, 'Cocina'),
 (5, 'Ama de Llaves'),
 (6, 'Ventas'),
-(7, 'Banquetes'),
-(8, 'Sistemas'),
-(9, 'Mantenimiento'),
-(10, 'Recepción'),
-(11, 'Cocina'),
-(12, 'Ama de Llaves'),
-(13, 'Ventas'),
-(14, 'Banquetes'),
-(15, 'Sistemas'),
-(16, 'Mantenimiento'),
-(17, 'Recepción'),
-(18, 'Cocina'),
-(19, 'Ama de Llaves'),
-(20, 'Ventas'),
-(21, 'Banquetes');
+(7, 'Banquetes');
 
 -- --------------------------------------------------------
 
@@ -81,7 +67,7 @@ CREATE TABLE `ticket` (
 --
 
 INSERT INTO `ticket` (`id_ticket`, `titulo`, `descripcion`, `prioridad`, `estado`, `fecha_creacion`, `id_usuario`, `id_area`) VALUES
-(3, 'No jalan los baños', 'E we no jalan los baños', 'Media', 'Realizado', '2025-06-30 20:13:04', 9, 20);
+(3, 'No jalan los baños', 'E we no jalan los baños', 'Media', 'Realizado', '2025-06-30 20:13:04', 9, 1);
 
 -- --------------------------------------------------------
 
@@ -94,16 +80,17 @@ CREATE TABLE `usuario` (
   `nombre` varchar(100) NOT NULL,
   `correo` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `rol` enum('Administrador','JefeArea','Usuario') NOT NULL
+  `rol` enum('Administrador','JefeArea','Usuario') NOT NULL,
+  `id_area` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `nombre`, `correo`, `password`, `rol`) VALUES
-(9, 'Admin Principal', 'admin@demo.com', 'admin123', 'Administrador'),
-(10, 'Jefe Sistemas', 'jefe@demo.com', 'jefe123', 'JefeArea');
+INSERT INTO `usuario` (`id_usuario`, `nombre`, `correo`, `password`, `rol`, `id_area`) VALUES
+(9, 'Admin Principal', 'admin@demo.com', 'admin123', 'Administrador', NULL),
+(10, 'Jefe Sistemas', 'jefe@demo.com', 'jefe123', 'JefeArea', 1);
 
 --
 -- Índices para tablas volcadas
@@ -113,7 +100,8 @@ INSERT INTO `usuario` (`id_usuario`, `nombre`, `correo`, `password`, `rol`) VALU
 -- Indices de la tabla `area`
 --
 ALTER TABLE `area`
-  ADD PRIMARY KEY (`id_area`);
+  ADD PRIMARY KEY (`id_area`),
+  ADD UNIQUE KEY `nombre_area` (`nombre_area`);
 
 --
 -- Indices de la tabla `ticket`
@@ -128,7 +116,21 @@ ALTER TABLE `ticket`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id_usuario`),
-  ADD UNIQUE KEY `correo` (`correo`);
+  ADD UNIQUE KEY `correo` (`correo`),
+  ADD KEY `id_area` (`id_area`);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `password_reset`
+--
+
+CREATE TABLE `password_reset` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `expires_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -138,7 +140,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `area`
 --
 ALTER TABLE `area`
-  MODIFY `id_area` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_area` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `ticket`
@@ -152,6 +154,9 @@ ALTER TABLE `ticket`
 ALTER TABLE `usuario`
   MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
+ALTER TABLE `password_reset`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- Restricciones para tablas volcadas
 --
@@ -162,6 +167,11 @@ ALTER TABLE `usuario`
 ALTER TABLE `ticket`
   ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`),
   ADD CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`id_area`) REFERENCES `area` (`id_area`);
+ALTER TABLE `usuario`
+  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`id_area`) REFERENCES `area` (`id_area`);
+
+ALTER TABLE `password_reset`
+  ADD CONSTRAINT `password_reset_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
