@@ -1,11 +1,16 @@
 <?php
 require_once "../includes/auth.php";
+require_once "../includes/csrf.php";
 require_once "../config/db.php";
 if (!es_admin()) { header("Location: ../dashboard.php"); exit; }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id     = $_POST['id_ticket'];
+    verify_csrf();
+    $id     = (int)$_POST['id_ticket'];
     $estado = $_POST['estado'];
+    if (!in_array($estado, ['Pendiente', 'En proceso', 'Realizado'])) {
+        die('Estado inválido');
+    }
     $stmt = $conn->prepare("UPDATE Ticket SET estado = ? WHERE id_ticket = ?");
     $stmt->execute([$estado, $id]);
 }
@@ -46,6 +51,7 @@ $tickets = $stmt->fetchAll();
                 <td><?= $row['fecha_creacion'] ?></td>
                 <td>
                     <form method="POST">
+                        <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
                         <input type="hidden" name="id_ticket" value="<?= $row['id_ticket'] ?>">
                         <select name="estado">
                             <option <?= $row['estado']=='Pendiente' ? 'selected' : '' ?>>Pendiente</option>
