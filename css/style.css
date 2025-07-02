@@ -1,0 +1,130 @@
+/* Estilos Generales */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+.container, main.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+/* Header */
+.main-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 0;
+}
+.header-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo {
+    margin: 0;
+    font-size: 1.5rem;
+}
+.nav-main .nav-list {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+.nav-main .nav-list li {
+    margin-left: 15px;
+}
+.nav-main .nav-list a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: normal;
+}
+.nav-main .nav-list a:hover {
+    text-decoration: underline;
+}
+.btn-logout {
+    color: #fff;
+    text-decoration: none;
+    background: #dc3545;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+.btn-logout:hover {
+    background: #c82333;
+}
+
+/* Footer */
+.main-footer {
+    background-color: #f2f2f2;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+}
+
+/* Formulario y Tablas */
+h2 {
+    margin-top: 0;
+}
+form input,
+form select,
+form textarea,
+form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+form button:hover {
+    background-color: #0056b3;
+}
+ul {
+    list-style: none;
+    padding: 0;
+}
+ul li {
+    margin-bottom: 5px;
+}
+ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+ul li a:hover {
+    text-decoration: underline;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+table, th, td {
+    border: 1px solid #ddd;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
