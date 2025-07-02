@@ -1,0 +1,16 @@
+{
+  "name": "DeskApp PHP",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "extensions": [
+    "bmewburn.vscode-intelephense-client",
+    "ms-azuretools.vscode-docker"
+  ],
+  "forwardPorts": [80],
+  "postCreateCommand": "composer install"
+}
