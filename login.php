@@ -1,29 +1,33 @@
 <?php
 session_start();
 require_once "config/db.php";
+require_once "includes/csrf.php";
 $error = null;
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $correo = $_POST['correo'];
+        verify_csrf();
+        $correo = filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL);
         $password = $_POST['password'];
+        if (!$correo) {
+            throw new Exception('Correo inválido');
+        }
         $stmt = $conn->prepare("SELECT * FROM Usuario WHERE correo = ?");
         $stmt->execute([$correo]);
         $row = $stmt->fetch();
-        if ($row) {
-            if ($password === $row['password']) {  // texto plano para pruebas
-                $_SESSION['id_usuario'] = $row['id_usuario'];
-                $_SESSION['rol'] = $row['rol'];
-                header("Location: dashboard.php");
-                exit;
-            } else {
-                $error = "Contraseña incorrecta.";
-            }
-        } else {
-            $error = "Usuario no encontrado.";
+        if ($row && password_verify($password, $row['password'])) {
+            $_SESSION['id_usuario'] = $row['id_usuario'];
+            $_SESSION['rol'] = $row['rol'];
+            header("Location: dashboard.php");
+            exit;
         }
+        $error = 'Credenciales incorrectas.';
     }
 } catch (Exception $e) {
-    $error = "Error en el login: " . $e->getMessage();
+    if (!is_dir('logs')) {
+        mkdir('logs', 0777, true);
+    }
+    error_log($e->getMessage() . "\n", 3, 'logs/error.log');
+    $error = 'Ocurrió un error, intente más tarde.';
 }
 ?>
 <!DOCTYPE html>
@@ -40,6 +44,7 @@ try {
         <?php endif; ?>
         <h2>Iniciar Sesión</h2>
         <form method="POST" autocomplete="off">
+            <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
             <input type="email" name="correo" placeholder="Correo" required>
             <input type="password" name="password" placeholder="Contraseña" required autocomplete="current-password">
             <button type="submit">Entrar</button>
