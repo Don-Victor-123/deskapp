@@ -14,11 +14,23 @@ try {
         $stmt = $conn->prepare("SELECT * FROM Usuario WHERE correo = ?");
         $stmt->execute([$correo]);
         $row = $stmt->fetch();
-        if ($row && password_verify($password, $row['password'])) {
-            $_SESSION['id_usuario'] = $row['id_usuario'];
-            $_SESSION['rol'] = $row['rol'];
-            header("Location: dashboard.php");
-            exit;
+        if ($row) {
+            if (password_verify($password, $row['password'])) {
+                $_SESSION['id_usuario'] = $row['id_usuario'];
+                $_SESSION['rol'] = $row['rol'];
+                header("Location: dashboard.php");
+                exit;
+            }
+            // Compatibilidad con contraseñas almacenadas en texto plano
+            if ($password === $row['password']) {
+                $newHash = password_hash($password, PASSWORD_DEFAULT);
+                $upd = $conn->prepare("UPDATE Usuario SET password = ? WHERE id_usuario = ?");
+                $upd->execute([$newHash, $row['id_usuario']]);
+                $_SESSION['id_usuario'] = $row['id_usuario'];
+                $_SESSION['rol'] = $row['rol'];
+                header("Location: dashboard.php");
+                exit;
+            }
         }
         $error = 'Credenciales incorrectas.';
     }
