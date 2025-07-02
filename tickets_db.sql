@@ -43,21 +43,7 @@ INSERT INTO `area` (`id_area`, `nombre_area`) VALUES
 (4, 'Cocina'),
 (5, 'Ama de Llaves'),
 (6, 'Ventas'),
-(7, 'Banquetes'),
-(8, 'Sistemas'),
-(9, 'Mantenimiento'),
-(10, 'Recepción'),
-(11, 'Cocina'),
-(12, 'Ama de Llaves'),
-(13, 'Ventas'),
-(14, 'Banquetes'),
-(15, 'Sistemas'),
-(16, 'Mantenimiento'),
-(17, 'Recepción'),
-(18, 'Cocina'),
-(19, 'Ama de Llaves'),
-(20, 'Ventas'),
-(21, 'Banquetes');
+(7, 'Banquetes');
 
 -- --------------------------------------------------------
 
@@ -113,7 +99,8 @@ INSERT INTO `usuario` (`id_usuario`, `nombre`, `correo`, `password`, `rol`) VALU
 -- Indices de la tabla `area`
 --
 ALTER TABLE `area`
-  ADD PRIMARY KEY (`id_area`);
+  ADD PRIMARY KEY (`id_area`),
+  ADD UNIQUE KEY `nombre_area` (`nombre_area`);
 
 --
 -- Indices de la tabla `ticket`
@@ -138,7 +125,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `area`
 --
 ALTER TABLE `area`
-  MODIFY `id_area` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_area` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `ticket`
