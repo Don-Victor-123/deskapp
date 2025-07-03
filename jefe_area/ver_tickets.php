@@ -24,12 +24,11 @@ $tickets = $stmt->fetchAll();
     <main class="container">
         <h2>Mis Tickets</h2>
         <table>
-            <tr><th>Título</th><th>Descripción</th><th>Prioridad</th><th>Estado</th><th>Área</th><th>Fecha</th></tr>
+            <tr><th>Título</th><th>Descripción</th><th>Estado</th><th>Área</th><th>Fecha</th></tr>
             <?php foreach ($tickets as $row): ?>
             <tr>
                 <td><?= htmlspecialchars($row['titulo']) ?></td>
                 <td><?= htmlspecialchars($row['descripcion']) ?></td>
-                <td><?= $row['prioridad'] ?></td>
                 <td><?= $row['estado'] ?></td>
                 <td><?= $row['nombre_area'] ?></td>
                 <td><?= $row['fecha_creacion'] ?></td>
