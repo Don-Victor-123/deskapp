@@ -6,7 +6,8 @@ require_once __DIR__ . '/auth.php';
 // Ajustar rutas para enlaces cuando se incluye desde subcarpetas
 $prefix = '';
 if (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ||
-    strpos($_SERVER['PHP_SELF'], '/jefe_area/') !== false) {
+    strpos($_SERVER['PHP_SELF'], '/jefe_area/') !== false ||
+    strpos($_SERVER['PHP_SELF'], '/coming_soon/') !== false) {
     $prefix = '../';
 }
 ?>
@@ -23,7 +24,8 @@ if (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ||
                     <li><a href="<?= $prefix ?>dashboard.php">Inicio</a></li>
                     <li><a href="<?= $prefix ?>jefe_area/crear_ticket.php">Crear Ticket</a></li>
                     <li><a href="<?= $prefix ?>jefe_area/ver_tickets.php">Mis Tickets</a></li>
-                    <li><a href="<?= $prefix ?>jefe_area/usuarios.php">Usuarios</a></li>
+                    <!-- <li><a href="<?= $prefix ?>jefe_area/usuarios.php">Usuarios</a></li> -->
+                    <li><a href="<?= $prefix ?>coming_soon/usuarios.php">Usuarios</a></li>
                 <?php else: ?>
                     <li><a href="<?= $prefix ?>dashboard.php">Inicio</a></li>
                 <?php endif; ?>
