@@ -9,21 +9,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $titulo = trim($_POST['titulo']);
     $descripcion = trim($_POST['descripcion']);
-    $prioridad = $_POST['prioridad'];
-    $area = (int)$_POST['area'];
+    $estado = $_POST['estado'];
     $usuario = $_SESSION['id_usuario'];
-    if (!in_array($prioridad, ['Baja', 'Media', 'Alta'])) {
-        $error = 'Prioridad inválida';
+    $area    = $_SESSION['id_area'];
+    if (!in_array($estado, ['Pendiente', 'En proceso', 'Realizado'])) {
+        $error = 'Estado inválido';
     } else {
+        $prioridad = 'Media';
         $stmt = $conn->prepare(
-            "INSERT INTO Ticket (titulo, descripcion, prioridad, estado, id_usuario, id_area) VALUES (?, ?, ?, 'Pendiente', ?, ?)"
+            "INSERT INTO Ticket (titulo, descripcion, prioridad, estado, id_usuario, id_area) VALUES (?, ?, ?, ?, ?, ?)"
         );
         $stmt->execute([
-            $titulo, $descripcion, $prioridad, $usuario, $area
+            $titulo, $descripcion, $prioridad, $estado, $usuario, $area
         ]);
     }
 }
-$areas = $conn->query("SELECT * FROM Area")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,15 +41,10 @@ $areas = $conn->query("SELECT * FROM Area")->fetchAll();
             <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
             <input type="text" name="titulo" placeholder="Título" required>
             <textarea name="descripcion" placeholder="Descripción" required></textarea>
-            <select name="prioridad">
-                <option value="Baja">Baja</option>
-                <option value="Media">Media</option>
-                <option value="Alta">Alta</option>
-            </select>
-            <select name="area">
-                <?php foreach ($areas as $a): if ($a['nombre_area'] === 'Usuarios') continue; ?>
-                <option value="<?= $a['id_area'] ?>"><?= htmlspecialchars($a['nombre_area']) ?></option>
-                <?php endforeach; ?>
+            <select name="estado">
+                <option value="Pendiente">Pendiente</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Realizado">Realizado</option>
             </select>
             <button type="submit">Crear</button>
         </form>
