@@ -12,7 +12,7 @@ require_once "config/db.php";
 <body>
     <?php include "includes/header.php"; ?>
     <main class="container">
-        <h2>Bienvenido, <?= htmlspecialchars($_SESSION['rol']) ?></h2>
+        <h2>Bienvenido, <?= htmlspecialchars($_SESSION['nombre']) ?></h2>
         <p>Selecciona una opción del menú para comenzar.</p>
     </main>
     <?php include "includes/footer.php"; ?>

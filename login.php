@@ -17,6 +17,7 @@ try {
         if ($row) {
             if (password_verify($password, $row['password'])) {
                 $_SESSION['id_usuario'] = $row['id_usuario'];
+                $_SESSION['nombre'] = $row['nombre'];
                 $_SESSION['rol'] = $row['rol'];
                 $_SESSION['id_area'] = $row['id_area'];
                 header("Location: dashboard.php");
@@ -28,6 +29,7 @@ try {
                 $upd = $conn->prepare("UPDATE Usuario SET password = ? WHERE id_usuario = ?");
                 $upd->execute([$newHash, $row['id_usuario']]);
                 $_SESSION['id_usuario'] = $row['id_usuario'];
+                $_SESSION['nombre'] = $row['nombre'];
                 $_SESSION['rol'] = $row['rol'];
                 $_SESSION['id_area'] = $row['id_area'];
                 header("Location: dashboard.php");
